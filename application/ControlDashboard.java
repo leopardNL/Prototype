@@ -50,21 +50,18 @@ public class ControlDashboard {
    
     @FXML
     private SplitPane horizontalRightSplit;
-
-    @FXML
-    private Button fullscreenButton;
     
     @FXML
     private MenuItem filtreXButton;
 
     @FXML
     private BorderPane imagePane;
-	
+    	
 	private String newline = "\n";
 	
-	private boolean full;
-
 	private String workingImage;
+	
+	
 	
 	
 	
@@ -72,7 +69,6 @@ public class ControlDashboard {
 
 	@FXML
 	void loadImage(ActionEvent event) {
-		full = false;
 		writeConsole(">> Image is loading...");
 		JFileChooser image = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -90,27 +86,9 @@ public class ControlDashboard {
 		} 
 
 	} 
-	
-	
-    @FXML
-    void fullScreenImage(MouseEvent event) {
-    	
-    	if(!full)
-    	{
-    		this.verticalSplit.setDividerPositions(1);
-    		this.horizontalLeftSplit.setDividerPositions(1);
-    		full = true;
-    	}
-    	else
-    	{
-    		this.verticalSplit.setDividerPositions(0.8);
-    		this.horizontalLeftSplit.setDividerPositions(0.7);
-    		full = false;
-    	}
-    	
-    }
-    
 
+    
+    
     @FXML
     void filtreX(ActionEvent event) {
     		ImageProcessing process = new ImageProcessing(this.workingImage);
@@ -119,6 +97,19 @@ public class ControlDashboard {
     		this.displayImage(workingImage);
     		
     }
+    
+    @FXML
+    void resizeImage(ActionEvent event) {
+    		this.resize();
+    }
+    
+    @FXML
+    void fullscreenImage(ActionEvent event) {
+    	this.verticalSplit.setDividerPositions(1);
+		this.horizontalLeftSplit.setDividerPositions(1);
+		this.resize();
+    }
+    
 	
 	
 	void writeConsole(String message){
@@ -129,15 +120,30 @@ public class ControlDashboard {
 	        File file = new File(path);
 	        Image i = new Image(file.toURI().toString());
 			mainImage.setImage(i);
-			//mainImage.fitWidthProperty().bind(imagePane.widthProperty());
+			this.resize();
+			
 			
 	} 
 	
-
-	
-
-
-
+	 
+	 public void resize(){
+		 
+		 double x = this.imagePane.getWidth();
+		 double y = this.imagePane.getHeight();
+		 double a = this.mainImage.getImage().getWidth();
+		 double b = this.mainImage.getImage().getHeight();
+		 double ecart1 = x-a-100;
+		 double ecart2 = y-b-100;
+		 
+		 if(ecart1 < 0)
+		 	{
+		 		mainImage.setFitWidth(this.imagePane.getWidth() - 100);
+		 	}
+		 if(ecart2 < 0)
+		 	{
+		 		mainImage.setFitHeight(this.imagePane.getHeight() - 100);
+		 	}
+	 }
 
 
 }
